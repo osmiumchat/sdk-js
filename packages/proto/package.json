@@ -1,0 +1,46 @@
+{
+  "name": "@osmiumchat/proto",
+  "version": "0.1.0",
+  "description": "Protocol types for Osmium",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/osmiumchat/sdk-js",
+    "directory": "packages/proto"
+  },
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "proto"
+  ],
+  "scripts": {
+    "codegen": "node compileProto.js",
+    "build": "pnpm codegen && tsup",
+    "typecheck": "tsc --noEmit"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@tanglechat/protobufjs-cli": "^1.1.5",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@tanglechat/protobufjs": "^7.5.4"
+  }
+}

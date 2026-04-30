@@ -1,0 +1,7 @@
+.direnv
+.env
+node_modules
+dist
+.vscode
+*.tsbuildinfo
+.npm-*

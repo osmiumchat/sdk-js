@@ -1,0 +1,3 @@
+[submodule "packages/proto/proto"]
+	path = packages/proto/proto
+	url = https://github.com/osmiumchat/proto.git
