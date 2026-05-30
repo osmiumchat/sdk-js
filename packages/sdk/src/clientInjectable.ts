@@ -1,12 +1,12 @@
-import { tangle } from '@osmiumchat/proto';
+import { osmium } from '@osmiumchat/proto';
 import { kClient } from './symbols.js';
 
 type UpdateKey = Exclude<{
-    [K in keyof tangle.client.updates.IUpdate]:
-        NonNullable<tangle.client.updates.IUpdate[K]> extends object ? K : never
-}[keyof tangle.client.updates.IUpdate], undefined>;
+    [K in keyof osmium.client.updates.IUpdate]:
+        NonNullable<osmium.client.updates.IUpdate[K]> extends object ? K : never
+}[keyof osmium.client.updates.IUpdate], undefined>;
 
-type UpdateValue<K extends UpdateKey> = NonNullable<tangle.client.updates.IUpdate[K]>;
+type UpdateValue<K extends UpdateKey> = NonNullable<osmium.client.updates.IUpdate[K]>;
 
 type Extractor<K extends UpdateKey> =
     (value: UpdateValue<K>) => object | object[] | null | undefined;

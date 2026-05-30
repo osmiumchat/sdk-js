@@ -6,18 +6,17 @@ You probably want [`@osmiumchat/sdk`](https://www.npmjs.com/package/@osmiumchat/
 
 ## Usage
 
-Types currently live under the `tangle` namespace, a migration to `osmium` is expected in the future.
 
 ```ts
-import { tangle } from "@osmiumchat/proto";
+import { osmium } from "@osmiumchat/proto";
 
-const msg = tangle.client.messages.SendMessage.create({
+const msg = osmium.client.messages.SendMessage.create({
     chatRef: { user: { userId: 123n } },
     message: "hello",
 });
 
-const bytes = tangle.client.core.ClientMessage.encode(clientMessage).finish();
-const decoded = tangle.client.core.ServerMessage.decode(bytes);
+const bytes = osmium.client.core.ClientMessage.encode(clientMessage).finish();
+const decoded = osmium.client.core.ServerMessage.decode(bytes);
 ```
 
 ## Codegen

@@ -1,7 +1,7 @@
 
 import WebSocket from 'ws';
 import { AsyncEventEmitter } from '@vladfrangu/async_event_emitter';
-import { tangle } from '@osmiumchat/proto';
+import { osmium } from '@osmiumchat/proto';
 import { Events } from './events.js';
 import { DEVICE_VERSION, VERSION } from './constants.js';
 import './extensions/index.js';
@@ -11,40 +11,40 @@ interface ClientEvents {
     [Events.Connected]: [];
     [Events.Disconnected]: [code: number, reason: string];
     [Events.Error]: [error: Error];
-    [Events.Initialized]: [initialized: tangle.client.core.Initialized];
-    [Events.Ready]: [user: tangle.client.types.User];
+    [Events.Initialized]: [initialized: osmium.client.core.Initialized];
+    [Events.Ready]: [user: osmium.client.types.User];
     [Events.AuthError]: [error: Error];
     [Events.Debug]: [message: string];
 
-    [Events.RawMessage]: [message: tangle.client.core.ServerMessage];
-    [Events.Result]: [result: tangle.client.core.RPCResult];
-    [Events.Update]: [update: tangle.client.updates.Update];
+    [Events.RawMessage]: [message: osmium.client.core.ServerMessage];
+    [Events.Result]: [result: osmium.client.core.RPCResult];
+    [Events.Update]: [update: osmium.client.updates.Update];
 
-    [Events.MessageCreated]: [update: tangle.client.updates.UpdateMessageCreated];        // 1
-    [Events.ChannelUpdated]: [update: tangle.client.updates.UpdateChannel];                // 2
-    [Events.MessageDeleted]: [update: tangle.client.updates.UpdateMessageDeleted];         // 3
-    [Events.UserStatus]: [update: tangle.client.updates.UpdateUserStatus];                 // 4
-    [Events.UserUpdated]: [update: tangle.client.updates.UpdateUser];                      // 5
-    [Events.CommunityUpdated]: [update: tangle.client.updates.UpdateCommunity];            // 6
-    [Events.ChannelDeleted]: [update: tangle.client.updates.UpdateChannelDeleted];         // 7
-    [Events.MessageUpdated]: [update: tangle.client.updates.UpdateMessage];                // 8
-    [Events.ChatTyping]: [update: tangle.client.updates.UpdateChatTyping];                 // 9
-    [Events.CommunityMember]: [update: tangle.client.updates.UpdateCommunityMember];       // 10
-    [Events.CommunityDeleted]: [update: tangle.client.updates.UpdateCommunityDeleted];     // 11
-    [Events.ConversationPermissions]: [update: tangle.client.updates.UpdateConversationPermissions]; // 12
-    [Events.ChatUpdated]: [update: tangle.client.updates.UpdateChat];                      // 13
-    [Events.SessionDeleted]: [update: tangle.client.updates.UpdateSessionDeleted];         // 14
-    [Events.CommunityUnavailable]: [update: tangle.client.updates.UpdateCommunityUnavailable]; // 15
-    [Events.MemberList]: [update: tangle.client.updates.UpdateMemberList];                 // 16
-    [Events.CommunityMemberDeleted]: [update: tangle.client.updates.UpdateCommunityMemberDeleted]; // 17
-    [Events.UserRelationship]: [update: tangle.client.updates.UpdateUserRelationship];     // 18
-    [Events.UserRelationshipDeleted]: [update: tangle.client.updates.UpdateUserRelationshipDeleted]; // 19
-    [Events.GroupUpdated]: [update: tangle.client.updates.UpdateGroup];                    // 20
-    [Events.RoomState]: [update: tangle.client.voice.UpdateRoomState];                     // 21
-    [Events.RoomParticipant]: [update: tangle.client.voice.UpdateRoomParticipant];         // 22
-    [Events.MessageReactions]: [update: tangle.client.updates.UpdateMessageReactions];     // 23
-    [Events.ConversationLastRead]: [update: tangle.client.updates.UpdateConversationLastRead]; // 24
-    [Events.CommunityMemberCreated]: [update: tangle.client.updates.UpdateCommunityMemberCreated]; // 25
+    [Events.MessageCreated]: [update: osmium.client.updates.UpdateMessageCreated];        // 1
+    [Events.ChannelUpdated]: [update: osmium.client.updates.UpdateChannel];                // 2
+    [Events.MessageDeleted]: [update: osmium.client.updates.UpdateMessageDeleted];         // 3
+    [Events.UserStatus]: [update: osmium.client.updates.UpdateUserStatus];                 // 4
+    [Events.UserUpdated]: [update: osmium.client.updates.UpdateUser];                      // 5
+    [Events.CommunityUpdated]: [update: osmium.client.updates.UpdateCommunity];            // 6
+    [Events.ChannelDeleted]: [update: osmium.client.updates.UpdateChannelDeleted];         // 7
+    [Events.MessageUpdated]: [update: osmium.client.updates.UpdateMessage];                // 8
+    [Events.ChatTyping]: [update: osmium.client.updates.UpdateChatTyping];                 // 9
+    [Events.CommunityMember]: [update: osmium.client.updates.UpdateCommunityMember];       // 10
+    [Events.CommunityDeleted]: [update: osmium.client.updates.UpdateCommunityDeleted];     // 11
+    [Events.ConversationPermissions]: [update: osmium.client.updates.UpdateConversationPermissions]; // 12
+    [Events.ChatUpdated]: [update: osmium.client.updates.UpdateChat];                      // 13
+    [Events.SessionDeleted]: [update: osmium.client.updates.UpdateSessionDeleted];         // 14
+    [Events.CommunityUnavailable]: [update: osmium.client.updates.UpdateCommunityUnavailable]; // 15
+    [Events.MemberList]: [update: osmium.client.updates.UpdateMemberList];                 // 16
+    [Events.CommunityMemberDeleted]: [update: osmium.client.updates.UpdateCommunityMemberDeleted]; // 17
+    [Events.UserRelationship]: [update: osmium.client.updates.UpdateUserRelationship];     // 18
+    [Events.UserRelationshipDeleted]: [update: osmium.client.updates.UpdateUserRelationshipDeleted]; // 19
+    [Events.GroupUpdated]: [update: osmium.client.updates.UpdateGroup];                    // 20
+    [Events.RoomState]: [update: osmium.client.voice.UpdateRoomState];                     // 21
+    [Events.RoomParticipant]: [update: osmium.client.voice.UpdateRoomParticipant];         // 22
+    [Events.MessageReactions]: [update: osmium.client.updates.UpdateMessageReactions];     // 23
+    [Events.ConversationLastRead]: [update: osmium.client.updates.UpdateConversationLastRead]; // 24
+    [Events.CommunityMemberCreated]: [update: osmium.client.updates.UpdateCommunityMemberCreated]; // 25
 }
 
 export type ClientOptions = {
@@ -59,16 +59,16 @@ export type ClientOptions = {
 
 type ResolvedOptions = Required<ClientOptions>;
 
-type Message = Exclude<tangle.client.core.ClientMessage[keyof tangle.client.core.ClientMessage], string | null | undefined | number | (() => {
+type Message = Exclude<osmium.client.core.ClientMessage[keyof osmium.client.core.ClientMessage], string | null | undefined | number | (() => {
     [k: string]: any;
 })>;
 
 // Derive the union of oneof field names from the protobuf interface.
 // If a new variant is added to Update, TypeScript will require it to be added below too.
 type UpdateKey = Exclude<{
-    [K in keyof tangle.client.updates.IUpdate]:
-        NonNullable<tangle.client.updates.IUpdate[K]> extends object ? K : never
-}[keyof tangle.client.updates.IUpdate], undefined>;
+    [K in keyof osmium.client.updates.IUpdate]:
+        NonNullable<osmium.client.updates.IUpdate[K]> extends object ? K : never
+}[keyof osmium.client.updates.IUpdate], undefined>;
 
 const UPDATE_MAP = {
     messageCreated:                Events.MessageCreated,           // 1
@@ -108,9 +108,9 @@ export class Client extends AsyncEventEmitter<ClientEvents> {
     private reconnectTimer: ReturnType<typeof setTimeout> | null;
     private heartbeatTimer: ReturnType<typeof setInterval> | null;
     private requestId: number;
-    private pendingRequests: Map<number, { resolve: (value: tangle.client.core.RPCResult) => void; reject: (error: tangle.client.core.RPCError) => void; timeoutId?: ReturnType<typeof setTimeout> }>;
+    private pendingRequests: Map<number, { resolve: (value: osmium.client.core.RPCResult) => void; reject: (error: osmium.client.core.RPCError) => void; timeoutId?: ReturnType<typeof setTimeout> }>;
 
-    user: tangle.client.types.User | null;
+    user: osmium.client.types.User | null;
 
     constructor(options: ClientOptions) {
         super();
@@ -193,11 +193,11 @@ export class Client extends AsyncEventEmitter<ClientEvents> {
         const packetName = namespace.charAt(0).toLowerCase() + namespace.slice(1) + name;
         const obj = this.makeClientMessage(reqId, packetName, message);
 
-        const encoded = tangle.client.core.ClientMessage.encode(obj).finish();
+        const encoded = osmium.client.core.ClientMessage.encode(obj).finish();
         const buf = encoded.buffer.slice(encoded.byteOffset, encoded.byteOffset + encoded.length);
 
-        let resolve: (value: tangle.client.core.RPCResult) => void = () => { }, reject: (error: tangle.client.core.RPCError) => void = () => { };
-        const promise = new Promise<tangle.client.core.RPCResult>((res, rej) => {
+        let resolve: (value: osmium.client.core.RPCResult) => void = () => { }, reject: (error: osmium.client.core.RPCError) => void = () => { };
+        const promise = new Promise<osmium.client.core.RPCResult>((res, rej) => {
             resolve = res;
             reject = rej;
         });
@@ -207,7 +207,7 @@ export class Client extends AsyncEventEmitter<ClientEvents> {
 
         if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
             this.pendingRequests.delete(reqId);
-            reject(new Error('WebSocket is not connected') as unknown as tangle.client.core.RPCError);
+            reject(new Error('WebSocket is not connected') as unknown as osmium.client.core.RPCError);
             return promise;
         }
 
@@ -217,12 +217,12 @@ export class Client extends AsyncEventEmitter<ClientEvents> {
     }
 
     makeClientMessage(reqId: number, packetName: string, packet: any): any {
-        const obj = tangle.client.core.ClientMessage.create({ id: reqId, [packetName]: packet });
+        const obj = osmium.client.core.ClientMessage.create({ id: reqId, [packetName]: packet });
         return obj;
     }
 
     async initialize() {
-        const message = tangle.client.core.Initialize.create({
+        const message = osmium.client.core.Initialize.create({
             clientId: this.options.clientId,
             appVersion: this.options.appVersion,
             deviceType: this.options.deviceType,
@@ -239,12 +239,12 @@ export class Client extends AsyncEventEmitter<ClientEvents> {
         }
     }
 
-    async authenticate(): Promise<tangle.client.auth.Authorization> {
+    async authenticate(): Promise<osmium.client.auth.Authorization> {
         if (!this.token) {
             throw new Error('Bot token is required for authentication');
         }
 
-        const message = tangle.client.auth.Authorize.create({
+        const message = osmium.client.auth.Authorize.create({
             token: this.token,
         });
 
@@ -259,7 +259,7 @@ export class Client extends AsyncEventEmitter<ClientEvents> {
 
     handleMessage(data: Uint8Array): void {
         try {
-            const serverMessage = tangle.client.core.ServerMessage.decode(data);
+            const serverMessage = osmium.client.core.ServerMessage.decode(data);
             this.emit(Events.RawMessage, serverMessage);
 
             if (serverMessage.result) {
@@ -301,7 +301,7 @@ export class Client extends AsyncEventEmitter<ClientEvents> {
         }
     }
 
-    handleAuthenticated(signedIn: tangle.client.auth.Authorization): void {
+    handleAuthenticated(signedIn: osmium.client.auth.Authorization): void {
         this.authenticated = true;
         this.user = signedIn.user;
         this.emit(Events.Debug, `Authenticated as ${this.user?.name} (id=${this.user?.id})`);
@@ -309,7 +309,7 @@ export class Client extends AsyncEventEmitter<ClientEvents> {
         this.startHeartbeat();
     }
 
-    handleInitialized(initialized: tangle.client.core.Initialized): void {
+    handleInitialized(initialized: osmium.client.core.Initialized): void {
         this.emit(Events.Initialized, initialized);
 
         if (!this.token) {
@@ -328,8 +328,8 @@ export class Client extends AsyncEventEmitter<ClientEvents> {
         this.heartbeatTimer = setInterval(() => {
             if (this.ws && this.ws.readyState === WebSocket.OPEN) {
                 // periodically send a useless message to keep the socket open
-                const uselessPacket = tangle.client.core.ClientMessage.create({ id: 1 });
-                const encoded = tangle.client.core.ClientMessage.encode(uselessPacket).finish();
+                const uselessPacket = osmium.client.core.ClientMessage.create({ id: 1 });
+                const encoded = osmium.client.core.ClientMessage.encode(uselessPacket).finish();
                 const buffer = encoded.buffer.slice(encoded.byteOffset, encoded.byteOffset + encoded.length);
                 this.ws?.send(buffer);
             }
